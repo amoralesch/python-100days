@@ -1,6 +1,6 @@
 # PyPassword Generator
 
-# Learn about loops
+# Learn about for loops
 
 import random
 
@@ -20,12 +20,12 @@ number_numbers = int(input("Who many numbers would you like?\n"))
 password = ''
 
 for i in range (0, number_letters):
-    password += letters[random.randint(0, len(letters) - 1)]
+    password += random.choice(letters)
 
 for i in range (0, number_symbols):
-    password += symbols[random.randint(0, len(symbols) - 1)]
+    password += random.choice(symbols)
 
 for i in range (0, number_numbers):
-    password += numbers[random.randint(0, len(numbers) - 1)]
+    password += random.choice(numbers)
 
 print(f"Here is your password: {password}")

@@ -1,6 +1,7 @@
 # Tip Calculator
 
-# Learn about numeric data types, casting, math operations and rounding.
+# Learn about numeric data types, casting, math operations, rounding and
+# f-strings.
 
 print("Welcome to the tip calculator.")
 

@@ -14,9 +14,9 @@ all_options = [letters, numbers, symbols]
 
 print("Welcome to PyPassword Generator.")
 
-number_letters = int(input("Who many letters would you like in your password?\n"))
-number_symbols = int(input("Who many symbosl would you like?\n"))
-number_numbers = int(input("Who many numbers would you like?\n"))
+number_letters = int(input("How many letters would you like in your password?\n"))
+number_symbols = int(input("How many symbols would you like?\n"))
+number_numbers = int(input("How many numbers would you like?\n"))
 
 total_len = number_letters + number_symbols + number_numbers
 selected = [number_letters, number_symbols, number_numbers]

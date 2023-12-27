@@ -23,7 +23,7 @@ print(r'''
 print("Welcome to Treasure Island.")
 print("Your mission is to find the treasure.")
 
-direction = input("You are at a cross road. Where do you want to go?" +
+direction = input("You are at a cross road. Where do you want to go? " +
     "Type 'left' or 'right'\n").lower()
 
 if direction == 'left':

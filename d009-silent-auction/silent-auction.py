@@ -13,7 +13,13 @@ others = True
 
 while others:
     name = input("What is your name?: ")
-    bid = int(input("What's your bid?: $"))
+    bid = -1
+    while bid <= 0:
+        bid = int(input("What's your bid?: $"))
+
+        if bid <= 0:
+            print('Invalid bid. Try again.')
+
     register[name] = bid
 
     others = input("Are there any other bidders? Type 'yes' or 'no'.\n")
@@ -22,7 +28,7 @@ while others:
     if others:
         os.system('clear')
 
-winner = ""
+winner = "no one"
 highest_bid = -1
 
 for key in register:

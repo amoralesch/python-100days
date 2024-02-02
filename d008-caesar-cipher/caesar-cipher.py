@@ -30,13 +30,24 @@ print("Welcome to Caesar Cipher.")
 end_program = False
 
 while not end_program:
-    operation = input("Type 'encode' to encode a text, or 'decode' to decode it.\n")
+    operation = 'try'
+    while operation != 'encode' and operation != 'decode':
+        operation = input("Type 'encode' to encode a text, or 'decode' to decode it.\n")
+
+        if operation != 'encode' and operation != 'decode':
+            print('Invalid, try again.')
+
     text = input("Write the text.\n").lower()
     shift = int(input("Type the shift number.\n"))
 
     caesar_cipher(operation=operation, starting_text=text, shift_amount=shift)
 
-    option = input("Do you want to do it again? Type 'yes' or 'no'\n").lower()
+    option = 'try'
+    while option != 'yes' and option != 'no':
+        option = input("Do you want to do it again? Type 'yes' or 'no'\n").lower()
+
+        if option != 'yes' and option != 'no':
+            print('Invalid, try again.')
 
     if option == 'no':
         end_program = True

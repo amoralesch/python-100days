@@ -3,13 +3,13 @@ def isEncodeOrDecode(encodeOrdecode):
 
 
 
-def validChoice(options, user_choice, re_select): 
+def validChoice(options, inputEncodeOrDecode, re_select): 
     selectOption = 'try'
-    while not isEncodeOrDecode(selectOption):
-        selectOption = input(options)   #encode  
+    while not inputEncodeOrDecode(selectOption):
+        selectOption = input(options)    
         
-        if not isEncodeOrDecode(selectOption):
-            print(re_select)    #here
+        if not inputEncodeOrDecode(selectOption):
+            print(re_select)  
     print(f"encode text is {selectOption}")
 
 validChoice("Type 'encode' to encode a text, or 'decode' to decode it.\n", isEncodeOrDecode, "Invalid, try again.")
@@ -28,7 +28,7 @@ def verify(userNum, numGreaterthanZero, invalidBid):
     name = input("What is your name?: \n")
     user_bid = int(input(userNum)) 
     
-    while isGreaterthanZero(user_bid):
+    while numGreaterthanZero(user_bid):
         print(invalidBid)
         user_bid = int(input(userNum))
 
@@ -37,33 +37,3 @@ def verify(userNum, numGreaterthanZero, invalidBid):
 verify("What's your bid?: $" , isGreaterthanZero, "Invalid bid. Try again.")    
 
   
-
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-                      
-            
-            
-            
-            
- 

@@ -1,39 +1,28 @@
 def isEncodeOrDecode(encodeOrdecode):
     return (encodeOrdecode == 'encode' or encodeOrdecode == 'decode')
 
+def isYesOrNo(value):
+    return value == 'yes' or value == 'no'
 
-
-def validChoice(options, inputEncodeOrDecode, re_select): 
+def validChoice(options, inputEncodeOrDecode, re_select="Invalid, try again."):
     selectOption = 'try'
     while not inputEncodeOrDecode(selectOption):
-        selectOption = input(options)    
-        
+        selectOption = input(options).lower()
+
         if not inputEncodeOrDecode(selectOption):
-            print(re_select)  
-    print(f"encode text is {selectOption}")
+            print(re_select)
 
-validChoice("Type 'encode' to encode a text, or 'decode' to decode it.\n", isEncodeOrDecode, "Invalid, try again.")
+    return selectOption
 
-
-
-
-print("---------------------")
 def isGreaterthanZero(bid_num):
     if not bid_num > 0:
         return bid_num
     return False
 
-
 def verify(userNum, numGreaterthanZero, invalidBid):
     name = input("What is your name?: \n")
-    user_bid = int(input(userNum)) 
-    
+    user_bid = int(input(userNum))
+
     while numGreaterthanZero(user_bid):
         print(invalidBid)
         user_bid = int(input(userNum))
-
-    print(f"winer bid is: {user_bid}")
-
-verify("What's your bid?: $" , isGreaterthanZero, "Invalid bid. Try again.")    
-
-  

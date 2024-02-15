@@ -1,5 +1,4 @@
 # Caesar Cipher
-
 # Learn about defining functions with and without parameters, assign
 # parameters by position or by name, default values for parameters, and
 # return values.
@@ -33,6 +32,7 @@ print("Welcome to Caesar Cipher.")
 end_program = False
 
 while not end_program:
+
     operation = validChoice("Type 'encode' to encode a text, or 'decode' to decode it.\n",
         isEncodeOrDecode)
 

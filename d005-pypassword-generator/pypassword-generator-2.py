@@ -13,6 +13,9 @@ symbols = ['!', '#', '$', '%', '&', '*', '(', ')', '+']
 max_len = 10
 warning = f"Enter a number between 0 and {max_len}"
 
+max_len = 10
+warning = f"Enter a number between 0 and {max_len}"
+
 print("Welcome to PyPassword Generator.")
 
 number_letters = -1

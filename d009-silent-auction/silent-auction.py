@@ -3,43 +3,34 @@
 # Learn about dictionaries
 
 from art import logo
+import verify_v2
 import os
 
 register = {}
 
 print(logo)
 print("Welcome to the secret auction program.")
-name = input("What is your name?: \n")
-
-from verify_v2 import verify,isGreaterthanZero
-others = True
 
 
+other_bidder = True
 
-while others:
-    user_bid = verify("What's your bid?: $" , isGreaterthanZero, "Invalid bid. Try again.")    
-
-#    name = input("What is your name?: ")
-#    bid = -1
-#    while bid <= 0:
-#        bid = int(input("What's your bid?: $"))
-#
-#        if bid <= 0:
-#            print('Invalid bid. Try again.')
-#
-    register[name] = user_bid
-    print(name)
+while other_bidder:
+    
+    user_name = verify_v2.verify("What is your name?: \n", verify_v2.getUserName, "Invalid name. Try again.")
+    
+    user_bid = verify_v2.verify("What's your bid?: $" , verify_v2.isGreaterthanZero, "Invalid bid. Try again.")     
+    
+    register[user_name] = int(user_bid)
 
 
-    others = input("Are there any other bidders? Type 'yes' or 'no'.\n")
-    others = others.lower() == 'yes' 
-
-    if others:
+    other_bidder = verify_v2.verify("Are there any other bidders? Type 'yes' or 'no'.\n", verify_v2.YesOrNo, "Invalid bid. Try again." )
+    
+    other_bidder = other_bidder.lower() == 'yes' 
+    if other_bidder:
         os.system('clear')
 
 winner = "no one"
 highest_bid = 0
-
 
 for key in register:
     if register[key] > highest_bid:

@@ -31,7 +31,6 @@ number_numbers = -1
 while number_numbers < 0 or number_numbers > max_len:
     number_numbers = int(input(f"How many numbers would you like? {warning}\n"))
 
-
 total_len = number_letters + number_symbols + number_numbers
 selected = [number_letters, number_symbols, number_numbers]
 password = ''

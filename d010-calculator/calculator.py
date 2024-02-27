@@ -18,11 +18,15 @@ def multiply(first, second):
 def divide(first, second):
     return first / second
 
+def toPower(first, second):
+    return first ** second
+
 operations = {
     '+': add,
     '-': minus,
     '*': multiply,
-    '/': divide
+    '/': divide,
+    '**': toPower
 }
 
 finish = False

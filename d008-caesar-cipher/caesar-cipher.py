@@ -1,12 +1,10 @@
 # Caesar Cipher
-
 # Learn about defining functions with and without parameters, assign
 # parameters by position or by name, default values for parameters, and
 # return values.
 
 from art import logo
-from verify import validChoice, isEncodeOrDecode
-import verify
+from verify import validChoice, isEncodeOrDecode, isYesOrNo
 
 alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
     'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
@@ -42,7 +40,7 @@ while not end_program:
     caesar_cipher(operation=operation, starting_text=text, shift_amount=shift)
 
     option = validChoice("Do you want to do it again? Type 'yes' or 'no'\n",
-        verify.isYesOrNo, "Pay attention! That is not good a valid choice.")
+        isYesOrNo, "Pay attention! That is not a valid choice.")
 
     if option == 'no':
         end_program = True

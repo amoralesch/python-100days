@@ -2,7 +2,13 @@
 
 # Learn about scopes for variables and functions.
 
+def is_easy_or_hard(input):
+    val = input.strip().lower()
+
+    return val == 'easy' or val == 'hard'
+
 from art import logo
+from helpers import is_integer, ask_input
 import random
 
 print(logo)
@@ -11,15 +17,16 @@ print("I'm thinking of a number between 1 and 100.")
 
 number = random.choice(range(1, 100))
 
-difficulty = input("Choose a difficulty. Type 'easy' or 'hard: ")
+difficulty = ask_input("Choose a difficulty. Type 'easy' or 'hard': ", is_easy_or_hard)
 attempts = 10
+
 if difficulty == 'hard':
     attempts = 5
 
 guess = -1
 while attempts > 0 and guess != number:
     print(f"You have {attempts} attempts remaining to guess the number.")
-    guess = int(input("Make a guess: "))
+    guess = int(ask_input("Make a guess: ", is_integer))
 
     if guess == number:
         print(f"You got it! The answer was {number}")

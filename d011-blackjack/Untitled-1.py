@@ -8,16 +8,16 @@
 import random 
 card = ['A',
          2,
-         3,
-         4,
-         5,
-         6,
-         7,
-         8,
-         9,
-        10,
-       'J',
-       'Q',
+ #        3,
+ #        4,
+ #        5,
+ #        6,
+ #        7,
+ #        8,
+ #        9,
+ #       10,
+ #      'J',
+ #      'Q',
        'K']
     
 house_hand = []
@@ -88,12 +88,19 @@ while player_value < 21:
         break
 
 
+###below works with multiple Aces
 while (house_value <= 16):
     house_hand.append(random.choice(card))
     house_value = house_value + Card_Value(house_hand[len(house_hand)-1])
-    if AceValue(house_hand, house_value):
-        house_value = house_value
+    while 'A' in house_hand:
+        if (house_value > 21):
+            house_value -= 10
+        else:
+            break
     print(f"House: {house_hand} | {house_value}")
+#    if AceValue(house_hand, house_value):
+#        house_value = house_value
+#    print(f"House: {house_hand} | {house_value}")
       
     
     

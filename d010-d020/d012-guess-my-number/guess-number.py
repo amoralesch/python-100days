@@ -15,9 +15,9 @@ def cheat(min_number, max_number, guess):
     new_guess = guess
 
     if to_lower > to_higher:
-        new_guess = guess - 1
+        new_guess = guess - int(to_lower / 2)
     elif to_higher > to_lower:
-        new_guess = guess + 1
+        new_guess = guess + int(to_higher / 2)
     elif to_higher > 1:
         new_guess = guess + 1
 

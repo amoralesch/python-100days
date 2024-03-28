@@ -11,52 +11,58 @@ def valid_input(input):
 
     return input == 'A' or input == 'B'
 
-import art
-import data
+def format_data(data):
+    return f"{data['name']}, {data['description']}, from {data['country']}"
+
+def correct_guess(guess, option_a, option_b):
+    if option_a > option_b:
+        return guess == 'A'
+    else:
+        return guess == 'B'
+
+def get_new_slots(option_a, option_b):
+    option_a = option_b
+
+    while option_a == option_b:
+        option_b = random.choice(data)
+
+    return option_a, option_b
+
+from art import logo, vs
+from data import data
 import random
-import helpers
+from helpers import ask_input
 import os
 
-info = data.data
-random.shuffle(info)
-
-slot_1 = info[0]
-slot_2 = info[1]
+slot_1 = None
+slot_2 = random.choice(data)
 index = 1
 
 score = 0
 message = None
 continue_game = True
 while continue_game:
-    print(art.logo)
+    print(logo)
 
     if message:
         print(message)
 
-    print(f'Compare A: {slot_1['name']}, {slot_1['description']}, from {slot_1['country']}')
-    print(art.vs)
-    print(f'Against B: {slot_2['name']}, {slot_2['description']}, from {slot_2['country']}')
+    slot_1, slot_2 = get_new_slots(slot_1, slot_2)
 
-    guess = helpers.ask_input("Who has more followers? Type 'A' or 'B': ", valid_input)
+    print(f'Compare A: {format_data(slot_1)}')
+    print(vs)
+    print(f'Against B: {format_data(slot_2)}')
 
-    if (guess == 'A' and slot_1['follower_count'] > slot_2['follower_count']) or \
-        (guess == 'B' and slot_2['follower_count'] > slot_1['follower_count']):
+    guess = ask_input("Who has more followers? Type 'A' or 'B': ", valid_input)
+
+    if correct_guess(guess, slot_1['follower_count'], slot_2['follower_count']):
         score += 1
         message = f"You're right! Current score {score}."
-
-        index +=1
-
-        if index >= len(info):
-            message = f"Amazing! You answered all the questions correctly. Final score {score}."
-            continue_game = False
-        else:
-            slot_1 = slot_1 if guess == 'A' else slot_2
-            slot_2 = info[index]
     else:
-        message = f"Sorry, that's wrong. Final score {score}."
         continue_game = False
+        message = f"Sorry, that's wrong. Final score {score}."
 
     os.system('clear')
 
-print(art.logo)
+print(logo)
 print(message)

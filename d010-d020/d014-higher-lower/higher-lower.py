@@ -1,26 +1,36 @@
 # Higher of Lower
 
 # Create a game from scratch, trying to see if the user can guess
-# correctly which celebrity has more or less followers than other.
+# correctly which celebrity has more or less followers than others.
 
 # Nothing new to learn on this day, but a practice to do something
 # on our own.
 
-def valid_input(input):
-    input = input.strip()
+from art import logo, vs
+from data import data
+import random
+from etc.helpers import ask_input
+import os
 
-    return input == 'A' or input == 'B'
 
-def format_data(data):
-    return f"{data['name']}, {data['description']}, from {data['country']}"
+def valid_input(value):
+    value = value.strip()
 
-def correct_guess(guess, option_a, option_b):
+    return value == 'A' or value == 'B'
+
+
+def format_data(record):
+    return f"{record['name']}, {record['description']}, from {record['country']}"
+
+
+def correct_guess(value, option_a, option_b):
     if option_a > option_b:
-        return guess == 'A'
+        return value == 'A'
     else:
-        return guess == 'B'
+        return value == 'B'
 
-def get_new_slots(option_a, option_b):
+
+def get_new_slots(option_b):
     option_a = option_b
 
     while option_a == option_b:
@@ -28,11 +38,6 @@ def get_new_slots(option_a, option_b):
 
     return option_a, option_b
 
-from art import logo, vs
-from data import data
-import random
-from helpers import ask_input
-import os
 
 slot_1 = None
 slot_2 = random.choice(data)
@@ -47,7 +52,7 @@ while continue_game:
     if message:
         print(message)
 
-    slot_1, slot_2 = get_new_slots(slot_1, slot_2)
+    slot_1, slot_2 = get_new_slots(slot_2)
 
     print(f'Compare A: {format_data(slot_1)}')
     print(vs)

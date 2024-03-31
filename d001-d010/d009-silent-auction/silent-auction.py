@@ -3,11 +3,17 @@
 # Learn about dictionaries
 
 from art import logo
-from etc.helpers import (
-    ask_input, is_valid_username,
-    is_yes_or_no, is_greater_than_zero
-)
+from etc.helpers import ask_input, is_yes_or_no
 import os
+
+
+def is_valid_username(username):
+    return username != '' and not username.isnumeric()
+
+
+def is_greater_than_zero(bid_num):
+    return int(bid_num) > 0
+
 
 other_bidder = True
 register = {}

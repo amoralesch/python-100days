@@ -4,11 +4,15 @@
 # return values.
 
 from art import logo
-from etc.helpers import ask_input, is_encode_or_decode, is_yes_or_no
+from etc.helpers import ask_input, is_yes_or_no
 
 ALPHABET = [
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
     'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+
+
+def is_encode_or_decode(value):
+    return value == 'encode' or value == 'decode'
 
 
 def caesar_cipher(starting_text, shift_amount, op):

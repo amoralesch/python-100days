@@ -3,9 +3,8 @@
 # Learn about scopes for variables and functions.
 
 from art import logo
-from etc.helpers import is_integer, ask_input
+from etc.helpers import ask_input
 import random
-
 
 HINTS = True
 
@@ -14,6 +13,10 @@ def is_valid_choice(value):
     val = value.strip().lower()
 
     return val == 'easy' or val == 'hard' or val == 'x-hard'
+
+
+def is_integer(value):
+    return value.strip().isnumeric()
 
 
 def cheat(min_number, max_number, correct_value):

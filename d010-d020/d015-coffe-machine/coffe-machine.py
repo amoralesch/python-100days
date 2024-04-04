@@ -11,6 +11,26 @@
 from art import logo
 from etc.helpers import ask_input
 
+MENU = {
+    'espresso': {
+        'Water': 50,
+        'Coffee': 18,
+        'price': 1.5
+    },
+    'latte': {
+        'Water': 200,
+        'Milk': 150,
+        'Coffee': 24,
+        'price': 2.5
+    },
+    'cappuccino': {
+        'Water': 250,
+        'Milk': 100,
+        'Coffee': 24,
+        'price': 3
+    }
+}
+
 
 def is_valid_option(value):
     v = value.strip().lower()
@@ -24,14 +44,14 @@ def is_decimal(value):
 
 
 def print_report():
-    for item in ingredients:
+    for item in resources:
         print(f'{item['name']}: {item['amount']}{item['unit']}')
 
-    print(f'Money: ${wallet:.2f}')
+    print(f'Money: ${profits:.2f}')
 
 
 def enough_resources(r):
-    for resource in ingredients:
+    for resource in resources:
         ingredient = resource['name']
         quantity = resource['amount']
 
@@ -43,7 +63,7 @@ def enough_resources(r):
 
 
 def make_coffee(r):
-    for resource in ingredients:
+    for resource in resources:
         ingredient = resource['name']
 
         if ingredient in r:
@@ -56,44 +76,24 @@ def ask_money(money_name, value):
     return int(ask_input(msg, is_decimal)) * value
 
 
-ingredients = [
+profits = 0
+resources = [
     {
         'name': 'Water',
-        'amount': 1000,
+        'amount': 300,
         'unit': 'ml'
     },
     {
         'name': 'Milk',
-        'amount': 1000,
+        'amount': 200,
         'unit': 'ml'
     },
     {
         'name': 'Coffee',
-        'amount': 1000,
+        'amount': 100,
         'unit': 'g'
     }
 ]
-wallet = 0
-recipes = {
-    'espresso': {
-        'Water': 100,
-        'Milk': 50,
-        'Coffee': 150,
-        'price': 2.50
-    },
-    'latte': {
-        'Water': 150,
-        'Milk': 100,
-        'Coffee': 100,
-        'price': 3.15
-    },
-    'cappuccino': {
-        'Water': 200,
-        'Milk': 150,
-        'Coffee': 50,
-        'price': 5.0
-    }
-}
 
 print(logo)
 still_on = True
@@ -108,7 +108,7 @@ while still_on:
     elif option == 'report':
         print_report()
     else:
-        recipe = recipes[option]
+        recipe = MENU[option]
         price = recipe['price']
 
         if not enough_resources(recipe):
@@ -116,17 +116,17 @@ while still_on:
 
         print(f'The price of {option} is ${price:.2f}.')
         amount = (
-            ask_money('quarters', 0.25) +
-            ask_money('dimes', 0.10) +
-            ask_money('nickles', 0.05) +
-            ask_money('pennies', 0.01)
+            ask_money('quarters', 0.25)
+            + ask_money('dimes', 0.10)
+            + ask_money('nickles', 0.05)
+            + ask_money('pennies', 0.01)
         )
 
         if price > amount:
             print("Sorry that's not enough money. Money refunded.")
             continue
 
-        wallet += price
+        profits += price
 
         if amount > price:
             print(f'Here is ${(amount - price):.2f} dollars in change.')

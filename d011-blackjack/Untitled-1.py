@@ -67,41 +67,26 @@ player_value = AceValue(player_hand, player_value)
 house_value = AceValue(house_hand, house_value)
 #print(f"House: {house_hand} | {house_value}")
 print(f"Player: {player_hand} | {player_value}")
-
-##### 'A' = 11
-#if (11 in player_hand[]) and (player_value > 21):
-#    player_hand.remove(11)
-#    player_hand.append(1)
-
-
-#Player's choice of adding cards
-while player_value < 21:
+   
+while (player_value < 21):
     adding_card = AddCard("Do you want another card? 'yes' or 'no'\n", YesOrNo, "Invalid input, please try again.")
-    adding_card = adding_card.lower() == 'yes'    
-    if adding_card:
-        player_hand.append(random.choice(card))
-        player_value = player_value + Card_Value(player_hand[len(player_hand)-1])
-        if AceValue(player_hand, player_value):
-            player_value = player_value
-        print(f"Player: {player_hand} | {player_value}")
+    player_hand.append(random.choice(card))
+    player_value = player_value + Card_Value(player_hand[len(player_hand)-1])
+    if player_hand[len(player_hand)-1] == 'A' and player_value > 21:
+        player_value -= 10
+    if player_value < 21:
+        adding_card = adding_card.lower() == 'yes' 
     else:
         break
-
-
-###below works with multiple Aces
+    print(f"player_hand:{player_hand} | {player_value}")
+    
 while (house_value <= 16):
     house_hand.append(random.choice(card))
-    house_value = house_value + Card_Value(house_hand[len(house_hand)-1])
-    while 'A' in house_hand:
-        if (house_value > 21):
-            house_value -= 10
-        else:
-            break
+    house_value += Card_Value(house_hand[len(house_hand)-1])
+    if house_hand[len(house_hand)-1] == 'A' and house_value > 21:
+        house_value -= 10
     print(f"House: {house_hand} | {house_value}")
-#    if AceValue(house_hand, house_value):
-#        house_value = house_value
-#    print(f"House: {house_hand} | {house_value}")
-      
+
     
     
     

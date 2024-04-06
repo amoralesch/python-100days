@@ -35,10 +35,10 @@ COLORS = [
     (208, 212, 210),
     (157, 126, 93)
 ]
-RATIO = 20
-GAP = 35
-ROWS = 15
-COLUMNS = 15
+RATIO = 10
+GAP = 30
+ROWS = 20
+COLUMNS = 21
 X_ORIGIN = - int((COLUMNS - 1) * GAP / 2)
 Y_ORIGIN = int((ROWS - 1) * GAP / 2)
 
@@ -47,10 +47,33 @@ screen = Screen()
 screen.colormode(255)
 turtle.speed("fastest")
 turtle.hideturtle()
+turtle.penup()
 
-for row in range(ROWS):
-    for column in range(COLUMNS):
-        turtle.teleport(X_ORIGIN + GAP * column, Y_ORIGIN - GAP * row)
-        turtle.dot(RATIO, random_color())
+turtle.teleport(X_ORIGIN - GAP, Y_ORIGIN)
+
+x_print = COLUMNS
+y_print = ROWS - 1
+
+while x_print > 0 or y_print > 0:
+    if y_print >= 0:
+        for i in range(x_print):
+            turtle.forward(GAP)
+            turtle.dot(RATIO, random_color())
+    else:
+        x_print = 0
+
+    turtle.right(90)
+
+    if x_print >= 0:
+        for i in range(y_print):
+            turtle.forward(GAP)
+            turtle.dot(RATIO, random_color())
+    else:
+        y_print = 0
+
+    turtle.right(90)
+
+    x_print -= 1
+    y_print -= 1
 
 screen.exitonclick()

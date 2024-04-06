@@ -14,7 +14,8 @@ question_data = [
     {
         "text": "The total surface area of a human lungs is the size of a "
                 "football pitch.",
-        "answer": "True"},
+        "answer": "True"
+    },
     {
         "text": "In West Virginia, USA, if you accidentally hit an animal "
                 "with your car, you are free to take it home to eat.",
@@ -35,7 +36,8 @@ question_data = [
     },
     {
         "text": "Google was originally called 'Backrub'.",
-        "answer": "True"},
+        "answer": "True"
+    },
     {
         "text": "Buzz Aldrin's mother's maiden name was 'Moon'.",
         "answer": "True"
@@ -43,7 +45,8 @@ question_data = [
     {
         "text": "No piece of square dry paper can be folded in half "
                 "more than 7 times.",
-        "answer": "False"},
+        "answer": "False"
+    },
     {
         "text": "A few ounces of chocolate can to kill a small dog.",
         "answer": "True"

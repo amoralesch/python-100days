@@ -19,7 +19,7 @@ def is_valid_option(value):
 question_bank = []
 
 for q in question_data:
-    question_bank.append(Question(q['text'], q['answer']))
+    question_bank.append(Question(q['question'], q['correct_answer']))
 
 shuffle(question_bank)
 quiz_brain = QuizBrain(question_bank)

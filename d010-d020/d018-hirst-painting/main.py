@@ -46,12 +46,11 @@ turtle = Turtle()
 screen = Screen()
 screen.colormode(255)
 turtle.speed("fastest")
+turtle.hideturtle()
 
 for row in range(ROWS):
     for column in range(COLUMNS):
         turtle.teleport(X_ORIGIN + GAP * column, Y_ORIGIN - GAP * row)
-
-        turtle.pencolor(random_color())
-        turtle.dot(RATIO)
+        turtle.dot(RATIO, random_color())
 
 screen.exitonclick()

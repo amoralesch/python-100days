@@ -6,6 +6,10 @@
 # Learn about file accesses: read and write; also about absolute vs
 # relative paths
 
+from pathlib import Path
+
+Path("output").mkdir(exist_ok=True)
+
 print('Reading original message ...')
 
 with open('input/lists/message.txt') as file:
@@ -15,7 +19,7 @@ print('Reading list of names ...')
 
 with open('input/message/people.csv') as file:
     for name in file.readlines():
-        name = name.replace('\n', '').strip()
+        name = name.strip()
         file_name = f'letter_{name.lower()}.txt'
         message = original_message.replace('[name]', name)
 

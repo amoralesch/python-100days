@@ -54,7 +54,6 @@ while attempts > 0 and guess != number:
 
         if HINTS:
             print(f"Psst, now the number is {number}")
-            break
 
     if guess == number:
         print(f"You got it! The answer was {number}")

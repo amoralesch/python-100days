@@ -16,9 +16,9 @@ FOREGROUND = "#9bdeac"
 BACKGROUND = "#f7f5dd"
 FONT_NAME = "Courier"
 PADDING = 100
-WORKING_TIMER = 10  # 25 * 60 # seconds
-BREAK_TIMER = 2  # 5 * 60 # seconds
-REST_TIMER = 5  # 20 * 60 # seconds
+WORKING_TIMER = 25 * 60  # seconds
+BREAK_TIMER = 5 * 60  # seconds
+REST_TIMER = 20 * 60  # seconds
 
 timeout_handler: str | None = None
 

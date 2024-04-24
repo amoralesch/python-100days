@@ -16,9 +16,9 @@ FOREGROUND = "#9bdeac"
 BACKGROUND = "#f7f5dd"
 FONT_NAME = "Courier"
 PADDING = 100
-WORKING_TIMER = 10000  # 25 * 60 * 1000 # milliseconds
-BREAK_TIMER = 2000  # 5 * 60 * 1000 # milliseconds
-REST_TIMER = 5000  # 20 * 60 * 1000 # milliseconds
+WORKING_TIMER = 10  # 25 * 60 # seconds
+BREAK_TIMER = 2  # 5 * 60 # seconds
+REST_TIMER = 5  # 20 * 60 # seconds
 
 timeout_handler: str | None = None
 
@@ -34,9 +34,9 @@ def reset_pomodoro():
         timeout_handler = None
 
 
-def format_time(milliseconds):
-    mins = math.floor(milliseconds / 1000 / 60)
-    secs = math.floor((milliseconds - mins * 1000 * 60) / 1000)
+def format_time(seconds):
+    mins = math.floor(seconds / 60)
+    secs = math.floor(seconds - mins * 60)
 
     if secs < 10:
         secs = f'0{secs}'
@@ -50,7 +50,7 @@ def move_timer(stage, time):
     global timeout_handler
     label = format_time(time)
     canvas.itemconfig(timer_id, text=label)
-    time -= 1000
+    time -= 1
 
     if time < 0:
         stage += 1

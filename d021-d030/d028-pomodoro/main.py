@@ -24,21 +24,24 @@ timeout_handler: str | None = None
 
 
 def reset_pomodoro():
+    global timeout_handler
+
     if timeout_handler is not None:
         window.after_cancel(timeout_handler)
         canvas.itemconfig(timer_id, text="--:--")
-        title_label.config(text="Timer")
+        title_label.config(text="Timer", fg=FOREGROUND)
         marks_label.config(text="")
+        timeout_handler = None
 
 
 def format_time(milliseconds):
-    min = math.floor(milliseconds / 1000 / 60)
-    secs = math.floor((milliseconds - min * 1000 * 60) / 1000)
+    mins = math.floor(milliseconds / 1000 / 60)
+    secs = math.floor((milliseconds - mins * 1000 * 60) / 1000)
 
     if secs < 10:
         secs = f'0{secs}'
 
-    label = f'{min}:{secs}'
+    label = f'{mins}:{secs}'
 
     return label
 
@@ -68,9 +71,10 @@ def move_timer(stage, time):
 
 
 def start_timer():
-    stage = 1
-    title_label.config(text='WORK', fg=FOREGROUND)
-    move_timer(stage, WORKING_TIMER)
+    if timeout_handler is None:
+        stage = 1
+        title_label.config(text='WORK', fg=FOREGROUND)
+        move_timer(stage, WORKING_TIMER)
 
 
 window = tk.Tk()

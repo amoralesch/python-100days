@@ -1,3 +1,12 @@
+# Password Manager
+
+# Create a basic app to generate and store passwords locally.
+# This is just an exercise, passwords are stored in plain text.
+# DO NOT USE this app for storing your info.
+#
+# Practice more about `tkinter`, pop-up messages, column span, and
+# new library called _pyperclip_.
+
 import tkinter as tk
 from tkinter import messagebox
 import pyperclip

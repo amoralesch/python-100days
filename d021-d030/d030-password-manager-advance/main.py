@@ -1,16 +1,15 @@
-# Password Manager
+# Password Manager - Advance
 
-# Create a basic app to generate and store passwords locally.
-# This is just an exercise, passwords are stored in plain text.
-# DO NOT USE this app for storing your info.
+# Update the project from day 29 to use JSON as the storing format,
+# and add search functionality.
 #
-# Practice more about `tkinter`, pop-up messages, column span, and
-# new library called _pyperclip_.
+# Learn about exceptions, and how to catch them.
 
 import tkinter as tk
 from tkinter import messagebox
 import pyperclip
 import random
+import json
 
 PADDING = 50
 LETTERS = [
@@ -20,6 +19,22 @@ LETTERS = [
     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 SYMBOLS = ['!', '#', '$', '%', '&', '*', '(', ')', '+']
+DB_FILE = 'output/output.json'
+
+
+def save_passwords(data):
+    with open(DB_FILE, 'w') as data_file:
+        json.dump(data, data_file, indent=2)
+
+
+def load_passwords():
+    try:
+        with open(DB_FILE) as data_file:
+            return json.load(data_file)
+    except FileNotFoundError:
+        with open(DB_FILE, 'w') as data_file:
+            json.dump({}, data_file)
+            return {}
 
 
 def save():
@@ -27,22 +42,25 @@ def save():
     email = email_entry.get()
     password = password_entry.get()
 
-    if len(website) == 0 or len(email) == 0 or len(password) == 0:
+    if len(website) == 0 or len(password) == 0:
         messagebox.showerror(
             title='Error',
             message='Cannot save with missing fields, please review.')
         return
 
-    should_save = messagebox.askokcancel(
-        title='Save record?',
-        message=f'Do you want to save information for {website}?')
+    new_record = {
+        website: {
+            'email': email,
+            'password': password
+        }
+    }
 
-    if should_save:
-        with open('output/output.tsv', 'a') as data_file:
-            data_file.write(f'{website}\t{email}\t{password}\n')
+    existing_data = load_passwords()
+    existing_data.update(new_record)
+    save_passwords(existing_data)
 
-        website_entry.delete(0, tk.END)
-        password_entry.delete(0, tk.END)
+    website_entry.delete(0, tk.END)
+    password_entry.delete(0, tk.END)
 
 
 def generate_password():
@@ -57,6 +75,19 @@ def generate_password():
     password_entry.delete(0, tk.END)
     password_entry.insert(0, password)
     pyperclip.copy(password)
+
+
+def search_password():
+    website = website_entry.get()
+    data = load_passwords()
+
+    if website not in data:
+        messagebox.showerror(title='Error', message=f'No entry found for {website}.')
+    else:
+        email = data[website]['email']
+        password = data[website]['password']
+        msg = f'Email: {email}\nPassword: {password}'
+        messagebox.showinfo(title=f'{website}', message=msg)
 
 
 window = tk.Tk()
@@ -78,8 +109,8 @@ password_label = tk.Label(text='Password:')
 password_label.grid(row=3, column=0)
 
 # Entries
-website_entry = tk.Entry(width=38)
-website_entry.grid(row=1, column=1, columnspan=2)
+website_entry = tk.Entry(width=21)
+website_entry.grid(row=1, column=1)
 email_entry = tk.Entry(width=38)
 email_entry.insert(0, 'admin@company.tld')
 email_entry.grid(row=2, column=1, columnspan=2)
@@ -87,6 +118,8 @@ password_entry = tk.Entry(width=21)
 password_entry.grid(row=3, column=1)
 
 # Buttons
+search_button = tk.Button(text='Search', width=13, command=search_password)
+search_button.grid(row=1, column=2)
 generate_button = tk.Button(text='Generate Password', command=generate_password)
 generate_button.grid(row=3, column=2)
 save_button = tk.Button(text='Save', width=36, command=save)

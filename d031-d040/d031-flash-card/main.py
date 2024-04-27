@@ -14,7 +14,10 @@ import pandas
 
 
 def get_data():
-    data_load = pandas.read_csv('data/french_words.csv')
+    try:
+        data_load = pandas.read_csv(KNOWN_WORDS)
+    except FileNotFoundError:
+        data_load = pandas.read_csv(DEFAULT_WORDS)
 
     return data_load.to_dict(orient='records')
 
@@ -32,23 +35,39 @@ def show_answer(selection):
 
 def show_new_word():
     global timer_handler
-    selection = random.choice(data)
+    global selected_record
+    selected_record = random.choice(data)
 
     language = 'French'
-    word = selection[language]
+    word = selected_record[language]
 
     canvas.itemconfig(image_handler, image=front_img)
     canvas.itemconfig(title_label, text=language, fill='black')
     canvas.itemconfig(word_label, text=word, fill='black')
 
-    timer_handler = window.after(TIME_OUT, show_answer, selection)
+    if timer_handler is not None:
+        window.after_cancel(timer_handler)
+
+    timer_handler = window.after(TIME_OUT, show_answer, selected_record)
 
 
+def word_known():
+    data.remove(selected_record)
+
+    df = pandas.DataFrame(data)
+    df.to_csv(KNOWN_WORDS, index=False)
+
+    show_new_word()
+
+
+DEFAULT_WORDS = 'data/french_words.csv'
 BACKGROUND_COLOR = "#B1DDC6"
 TIME_OUT = 3000
+KNOWN_WORDS = 'data/output.csv'
 
 data = get_data()
 timer_handler = None
+selected_record: dict | None = None
 
 window = tk.Tk()
 window.title('Flash Cards')
@@ -89,7 +108,7 @@ correct_button = tk.Button(
     image=correct_img,
     bg=BACKGROUND_COLOR,
     highlightthickness=0,
-    command=show_new_word)
+    command=word_known)
 correct_button.grid(row=1, column=1)
 
 show_new_word()

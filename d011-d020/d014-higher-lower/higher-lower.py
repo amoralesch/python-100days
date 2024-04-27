@@ -46,6 +46,7 @@ index = 1
 score = 0
 message = None
 continue_game = True
+
 while continue_game:
     print(logo)
 

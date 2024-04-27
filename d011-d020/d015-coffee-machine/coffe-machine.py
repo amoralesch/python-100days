@@ -45,7 +45,7 @@ def is_decimal(value):
 
 def print_report():
     for item in resources:
-        print(f'{item['name']}: {item['amount']}{item['unit']}')
+        print(f"{item['name']}: {item['amount']}{item['unit']}")
 
     print(f'Money: ${profits:.2f}')
 

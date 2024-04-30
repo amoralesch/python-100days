@@ -70,6 +70,21 @@ def make_coffee(r):
             resource['amount'] -= r[ingredient]
 
 
+def get_money(total):
+    deposited = ask_money('quarters', 0.25)
+
+    if deposited < total:
+        deposited += ask_money('dimes', 0.10)
+
+    if deposited < total:
+        deposited += ask_money('nickles', 0.05)
+
+    if deposited < total:
+        deposited += ask_money('pennies', 0.01)
+
+    return deposited
+
+
 def ask_money(money_name, value):
     msg = f'How many {money_name} did you inserted? '
 
@@ -115,12 +130,7 @@ while still_on:
             continue
 
         print(f'The price of {option} is ${price:.2f}.')
-        amount = (
-            ask_money('quarters', 0.25)
-            + ask_money('dimes', 0.10)
-            + ask_money('nickles', 0.05)
-            + ask_money('pennies', 0.01)
-        )
+        amount = get_money(price)
 
         if price > amount:
             print("Sorry that's not enough money. Money refunded.")

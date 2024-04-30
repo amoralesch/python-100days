@@ -1,4 +1,4 @@
-A message to [Name]
+A message to [name]
 
 This may be a shock, but today is your birthday!
 

@@ -34,7 +34,7 @@ MENU = {
 
 def is_valid_option(value):
     v = value.strip().lower()
-    valid_options = ['espresso', 'latte', 'cappuccino', 'off', 'report']
+    valid_options = ['espresso', 'latte', 'cappuccino', 'off', 'report', 'start']
 
     return v in valid_options
 
@@ -49,7 +49,7 @@ def print_report():
 
     print(f'Money: ${profits:.2f}')
 
-
+    
 def enough_resources(r):
     for resource in resources:
         ingredient = resource['name']
@@ -68,13 +68,11 @@ def make_coffee(r):
 
         if ingredient in r:
             resource['amount'] -= r[ingredient]
-
-
+       
+    
 def ask_money(money_name, value):
     msg = f'How many {money_name} did you inserted? '
-
     return int(ask_input(msg, is_decimal)) * value
-
 
 profits = 0
 resources = [
@@ -99,15 +97,17 @@ print(logo)
 still_on = True
 
 while still_on:
-    option = ask_input(
-        'What would you like? (espresso/latte/cappuccino): ',
-        is_valid_option).lower()
-
+    option = ask_input(f"Start      OFF     Report\n", is_valid_option).lower()
+    
     if option == 'off':
         still_on = False
     elif option == 'report':
         print_report()
     else:
+        option = ask_input(
+        'What would you like? (espresso/latte/cappuccino): ',
+        is_valid_option).lower()
+        
         recipe = MENU[option]
         price = recipe['price']
 
@@ -115,20 +115,24 @@ while still_on:
             continue
 
         print(f'The price of {option} is ${price:.2f}.')
-        amount = (
-            ask_money('quarters', 0.25)
-            + ask_money('dimes', 0.10)
-            + ask_money('nickles', 0.05)
-            + ask_money('pennies', 0.01)
-        )
-
-        if price > amount:
+        
+        amount = 0
+        
+        amount += ask_money('quarters', 0.25)
+        if amount < price:
+            amount += ask_money('dimes', 0.10)
+        elif amount < price:
+            amount += ask_money('nickles', 0.05)
+        elif amount < price:
+            amount += ask_money('pennies', 0.01)
+            
+        elif price > amount:
             print("Sorry that's not enough money. Money refunded.")
             continue
 
         profits += price
 
-        if amount > price:
+        if price <= amount:
             print(f'Here is ${(amount - price):.2f} dollars in change.')
 
         make_coffee(recipe)

@@ -126,7 +126,7 @@ while still_on:
         elif amount < price:
             amount += ask_money('pennies', 0.01)
             
-        elif price > amount:
+        elif price > amount: 
             print("Sorry that's not enough money. Money refunded.")
             continue
 

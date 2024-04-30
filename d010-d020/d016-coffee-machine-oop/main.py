@@ -24,7 +24,7 @@ def is_valid_option(value):
 
 
 still_on = True
-
+ 
 while still_on:
     option = ask_input(f"Start      OFF     Report\n", is_valid_option).lower()
 

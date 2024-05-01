@@ -60,6 +60,14 @@ class QuizUi:
             self.canvas.itemconfig(
                 self.question_label,
                 text=self.last_question.prompt())
+        else:
+            self.canvas.itemconfig(
+                self.question_label,
+                text=f"Quiz completed: "
+                     f"Your final score is "
+                     f"{self.brain.score}/{self.brain.total_questions()}.")
+            self.true_button.config(state='disabled')
+            self.false_button.config(state='disabled')
 
     def answer_question(self, is_correct):
         if is_correct:

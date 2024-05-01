@@ -11,7 +11,9 @@ from data import question_data
 from random import shuffle
 import ui
 
-question_bank = [Question(q['question'], q['correct_answer']) for q in question_data]
+question_bank = [
+    Question(q['question'], q['correct_answer'])
+    for q in question_data]
 shuffle(question_bank)
 quiz_brain = QuizBrain(question_bank)
 ui = ui.QuizUi(quiz_brain)

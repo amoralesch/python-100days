@@ -1,6 +1,6 @@
 import requests
 
-API_URL = 'https://opentdb.com/api.php?amount=10&type=boolean'
+API_URL = 'https://opentdb.com/api.php'
 PARAMETERS = {
     'amount': 10,
     'type': 'boolean'

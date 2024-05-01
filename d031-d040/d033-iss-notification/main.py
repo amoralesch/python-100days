@@ -61,16 +61,14 @@ def is_night_right_now():
         'tzid': TIME_ZONE,
         'formatted': 0
     }
-
     info = requests.get(url=TIME_API_URL, params=params)
     sunrise = get_hour_from_datetime(info.json()['results']['sunrise'])
-    sunset = int(info.json()['results']['sunset'].split('T')[1][0:2])
+    sunset = get_hour_from_datetime(info.json()['results']['sunset'])
     hour_now = dt.datetime.now().hour
 
     return hour_now < sunrise or hour_now > sunset
 
 
-# if it is night, and the ISS is above us, then
 if iss_above() and is_night_right_now():
     send_email(SOURCE_EMAIL, "ISS above. Look up.")
 else:

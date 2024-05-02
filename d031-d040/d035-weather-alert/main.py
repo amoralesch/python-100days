@@ -7,16 +7,17 @@
 # decided to use email, as we cannot create a free Twilio account
 # without a real phone number.
 #
-# More practice about APIs
+# More practice about APIs, learn about environment variables.
 
 import requests
 import smtplib
+import os
 
 CURRENT_LOCATION = {
     'latitude': 40.728157,
     'longitude': -74.077644
 }
-API_KEY = 'update-me'
+API_KEY = os.environ.get('OWM_API_KEY')
 WEATHER_API_URL = 'http://api.openweathermap.org/data/2.5/forecast'
 # taken from https://openweathermap.org/weather-conditions
 ALERT_THRESHOLD = 700
@@ -27,13 +28,13 @@ WEATHER_PARAMS = {
     'units': 'metric',
     'cnt': 5
 }
-SOURCE_EMAIL = 'update-me'
-SOURCE_PASS = "update-me"
+SOURCE_EMAIL = os.environ.get('MY_EMAIL')
+SOURCE_PASS = os.environ.get('MY_EMAIL_PASSWORD')
 SMTP_SERVER = 'smtp-mail.outlook.com'
 SMTP_PORT = 587
 
 
-def umbrella_needed():
+def umbrella_needed() -> bool:
     response = requests.get(url=WEATHER_API_URL, params=WEATHER_PARAMS)
     response.raise_for_status()
 
@@ -46,7 +47,7 @@ def umbrella_needed():
     return len(weather_info) > 0
 
 
-def send_alert():
+def send_alert() -> None:
     with smtplib.SMTP(
             host=SMTP_SERVER,
             port=SMTP_PORT,

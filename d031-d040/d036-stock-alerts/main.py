@@ -10,9 +10,10 @@
 # More practice with the existing concepts, nothing new on this day.
 
 import requests
-import math
 import smtplib
 import os
+
+DEBUG = True
 
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla"
@@ -24,7 +25,7 @@ AV_PARAMS = {
     'symbol': STOCK,
     'apikey': AV_API_KEY
 }
-ALERT_THRESHOLD = 1
+ALERT_THRESHOLD = 0.001
 
 NEWS_COUNT = 3
 NEWS_API_KEY = os.environ.get('NEWS_API_KEY')
@@ -44,20 +45,22 @@ SMTP_SERVER = 'smtp-mail.outlook.com'
 SMTP_PORT = 587
 
 
-def stock_moved() -> bool:
+def stock_change() -> float:
     response = requests.get(url=AV_API_ROOT, params=AV_PARAMS)
     response.raise_for_status()
     data = response.json()
 
     price = float(data['Global Quote']['05. price'])
     prev_price = float(data['Global Quote']['08. previous close'])
-    print(f'Price: {price}. Previous close: {prev_price}')
 
     diff = price / prev_price * 100
-    percentage_change = math.fabs(100 - diff)
-    print(f'Percentage change: {percentage_change}')
+    percentage_change = 100 - diff
 
-    return percentage_change >= ALERT_THRESHOLD
+    if DEBUG:
+        print(f'Price: {price}. Previous close: {prev_price}')
+        print(f'Percentage change: {percentage_change}')
+
+    return percentage_change
 
 
 def get_news() -> (str, str):
@@ -91,27 +94,18 @@ def strip_non_ascii(string: str) -> str:
     return ''.join(stripped)
 
 
-#Optional: Format the SMS message like this:
-"""
-TSLA: 🔺2%
-Headline: Were Hedge Funds Right About Piling Into Tesla Inc. (TSLA)?.
-Brief: We at Insider Monkey have gone over 821 13F filings that hedge funds and prominent investors are required to file by the SEC The 13F filings show the funds' and investors' portfolio positions as of March 31st, near the height of the coronavirus market crash.
-or
-"TSLA: 🔻5%
-Headline: Were Hedge Funds Right About Piling Into Tesla Inc. (TSLA)?.
-Brief: We at Insider Monkey have gone over 821 13F filings that hedge funds and prominent investors are required to file by the SEC The 13F filings show the funds' and investors' portfolio positions as of March 31st, near the height of the coronavirus market crash.
-"""
+change_percent = stock_change()
+if change_percent > ALERT_THRESHOLD or change_percent < -ALERT_THRESHOLD:
+    change = '^' if change_percent > ALERT_THRESHOLD else 'v'
+    title = f'{STOCK} {change} {change_percent:.2f}%'
 
-# if stock_moved():
-#     print("Get News!")
+    news_tuples = get_news()
+    news = ''
 
-news_tuples = get_news()
-news = ''
+    for (headline, brief) in news_tuples:
+        news += f'Headline: {headline}\nBrief: {brief}\n\n'
 
-for (headline, brief) in news_tuples:
-    news += f'Headling: {headline}\nBrief: {brief}\n\n'
+    if len(news) == 0:
+        news = 'No headlines found, no idea why the stock is moving!'
 
-send_email(
-    SOURCE_EMAIL,
-    f'News for {STOCK}',
-    f'Read this!\n\n{strip_non_ascii(news)}')
+    send_email(SOURCE_EMAIL, title, strip_non_ascii(news))

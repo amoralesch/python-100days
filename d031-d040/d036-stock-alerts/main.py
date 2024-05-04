@@ -68,7 +68,9 @@ def get_news() -> (str, str):
     response.raise_for_status()
     data = response.json()
 
-    articles = [(article['title'], article['description']) for article in data['articles']]
+    articles = [
+        (article['title'], article['description'])
+        for article in data['articles']]
 
     print(articles)
     return articles
@@ -95,7 +97,8 @@ def strip_non_ascii(string: str) -> str:
 
 
 change_percent = stock_change()
-if change_percent > ALERT_THRESHOLD or change_percent < -ALERT_THRESHOLD:
+
+if abs(change_percent) > ALERT_THRESHOLD:
     change = '^' if change_percent > ALERT_THRESHOLD else 'v'
     title = f'{STOCK} {change} {change_percent:.2f}%'
 

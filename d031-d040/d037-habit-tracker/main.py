@@ -5,9 +5,9 @@
 # Lear about other HTTP verbs, `POST, `PUT`, and `DELETE`
 
 from etc.helpers import ask_input
-import random
-import pandas
-import requests
+from account_manager import AccountManager
+from account import Account
+from pixela_manager import new_token, create_user, delete_account
 
 
 def is_valid(selection: str) -> bool:
@@ -22,19 +22,6 @@ def valid_username(selection: str) -> bool:
         valid = valid and char.isalnum()
 
     return valid and 0 < len(selection) <= 32
-
-
-def new_token() -> str:
-    """Valid regex: [ -~]{8,128}"""
-    minimum = ord(' ')
-    maximum = ord('~')
-    token = ''
-    length = random.randint(8, 128)
-
-    for _ in range(length):
-        token += chr(random.randint(minimum, maximum))
-
-    return token
 
 
 def get_option() -> int:
@@ -53,39 +40,13 @@ def get_option() -> int:
 
 
 def show_accounts() -> None:
-    try:
-        data = pandas.read_csv(CONFIG_FILE)
+    if len(account_manager.accounts) > 0:
         print('Accounts:')
 
-        for name in [row['NAME'] for _, row in data.iterrows()]:
-            print(f'- {name}')
-    except FileNotFoundError:
-        print('No accounts saved.')
-
-
-def username_exists(username: str) -> bool:
-    try:
-        data = pandas.read_csv(CONFIG_FILE)
-
-        return username in [row['NAME'] for _, row in data.iterrows()]
-    except FileNotFoundError:
-        return False
-
-
-def store_account(username: str, token: str) -> None:
-    try:
-        data = pandas.read_csv(CONFIG_FILE)
-        accounts = data.to_dict(orient='records')
-    except FileNotFoundError:
-        accounts = []
-
-    accounts.append({
-        'NAME': username,
-        'TOKEN': token
-    })
-
-    df = pandas.DataFrame(accounts)
-    df.to_csv(CONFIG_FILE, index=False)
+        for a in account_manager.accounts:
+            print(f'- {a.username}')
+    else:
+        print('No accounts found.')
 
 
 def create_account() -> None:
@@ -93,34 +54,37 @@ def create_account() -> None:
         "What's the username? [a-z][a-z0-9-]{1,32} ",
         valid_username)
 
-    if username_exists(username):
+    if account_manager.account_exists(username):
         print('That username already exists.')
 
         return
 
-    token = new_token()
+    account = Account(username, new_token())
 
-    params = PIXELA_USER_PARAMS
-    params['token'] = token
-    params['username'] = username
-
-    response = requests.post(url=PIXELA_USER_API_ENDPOINT, json=params)
-    response.raise_for_status()
-
-    store_account(username, token)
-    print(f'Account created, go to: https://pixe.la/@{username}')
+    if create_user(account):
+        account_manager.store_account(account)
+        print(f'Account created, go to: https://pixe.la/@{username}')
+    else:
+        print('Unable to create account. Maybe try another username?')
 
 
-CONFIG_FILE = 'output/accounts.csv'
+def remove_account():
+    username = input("What's the username? ")
+    user = account_manager.get_account(username)
 
-PIXELA_USER_API_ENDPOINT = 'https://pixe.la/v1/users'
-PIXELA_USER_PARAMS = {
-    'token': 'token',
-    'username': 'username',
-    'agreeTermsOfService': 'yes',
-    'notMinor': 'yes'
-}
+    if user is None:
+        print('Username not found.')
 
+        return
+
+    if delete_account(user):
+        account_manager.remove_account(user)
+        print('Account deleted.')
+    else:
+        print('Some error occurred, please try again.')
+
+
+account_manager = AccountManager()
 restart = True
 
 while restart:
@@ -130,5 +94,7 @@ while restart:
         show_accounts()
     elif option == 2:
         create_account()
+    elif option == 3:
+        remove_account()
     else:
         restart = False

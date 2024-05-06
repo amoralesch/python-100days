@@ -10,7 +10,8 @@ from account import Account
 from graph import Graph
 from pixela_manager import (
     new_token, create_user, delete_account, create_graph, get_graphs,
-    get_graph, delete_graph)
+    get_graph, delete_graph, create_pixel, get_pixel, edit_pixel,
+    delete_pixel)
 
 
 def is_valid(selection: str) -> bool:
@@ -35,6 +36,11 @@ def valid_graph_name(selection: str) -> bool:
         valid = valid and (char.isalnum() or char == '-')
 
     return valid and 0 < len(selection) <= 16
+
+
+def valid_date(value: str) -> bool:
+    """Format: yyyyMMdd"""
+    return value.isnumeric() and len(value) == 8
 
 
 def get_option() -> int:
@@ -169,6 +175,98 @@ def remove_graph():
         print('Error deleting graph.')
 
 
+def add_pixel():
+    username = input("What's the username? ")
+    user = account_manager.get_account(username)
+
+    if user is None:
+        print('Username not found.')
+
+        return
+
+    graph_id = input("What's the graph id? ")
+    graph = get_graph(user, graph_id)
+
+    if graph is None:
+        print('Graph not found.')
+
+        return
+
+    date = ask_input("What's the date? [yyyyMMdd] ", valid_date)
+    quantity = input("What's the quantity? ")
+
+    if create_pixel(user, graph, date, quantity):
+        print('Pixel added.')
+    else:
+        print('Error adding pixel.')
+
+
+def change_pixel():
+    username = input("What's the username? ")
+    user = account_manager.get_account(username)
+
+    if user is None:
+        print('Username not found.')
+
+        return
+
+    graph_id = input("What's the graph id? ")
+    graph = get_graph(user, graph_id)
+
+    if graph is None:
+        print('Graph not found.')
+
+        return
+
+    date = ask_input("What's the date? [yyyyMMdd] ", valid_date)
+
+    pixel = get_pixel(user, graph, date)
+
+    if pixel is None:
+        print('Pixel not found.')
+
+        return
+
+    quantity = input("What's the new quantity? ")
+
+    if edit_pixel(user, graph, date, quantity):
+        print('Pixel changed.')
+    else:
+        print('Error changing pixel.')
+
+
+def remove_pixel():
+    username = input("What's the username? ")
+    user = account_manager.get_account(username)
+
+    if user is None:
+        print('Username not found.')
+
+        return
+
+    graph_id = input("What's the graph id? ")
+    graph = get_graph(user, graph_id)
+
+    if graph is None:
+        print('Graph not found.')
+
+        return
+
+    date = ask_input("What's the date? [yyyyMMdd] ", valid_date)
+
+    pixel = get_pixel(user, graph, date)
+
+    if pixel is None:
+        print('Pixel not found.')
+
+        return
+
+    if delete_pixel(user, graph, date):
+        print('Pixel deleted.')
+    else:
+        print('Error deleting pixel.')
+
+
 account_manager = AccountManager()
 restart = True
 
@@ -187,5 +285,11 @@ while restart:
         new_graph()
     elif option == 6:
         remove_graph()
+    elif option == 7:
+        add_pixel()
+    elif option == 8:
+        change_pixel()
+    elif option == 9:
+        remove_pixel()
     else:
         restart = False

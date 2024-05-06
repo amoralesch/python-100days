@@ -130,3 +130,85 @@ def delete_graph(account: Account, graph: Graph) -> bool:
 
     return True
 
+
+def create_pixel(
+        account: Account,
+        graph: Graph,
+        date: str,
+        quantity: str):
+    headers = {
+        'X-USER-TOKEN': account.token
+    }
+    params= {
+        'date': date,
+        'quantity': quantity
+    }
+
+    response = requests.post(
+        url=f'{PIXELA_USER_API_ENDPOINT}/{account.username}/graphs/{graph.id}',
+        json=params,
+        headers=headers)
+
+    try:
+        response.raise_for_status()
+    except HTTPError:
+        return False
+
+    return True
+
+
+def get_pixel(account: Account, graph: Graph, date: str) -> bool:
+    headers = {
+        'X-USER-TOKEN': account.token
+    }
+
+    response = requests.get(
+        url=f'{PIXELA_USER_API_ENDPOINT}/{account.username}/graphs/{graph.id}/{date}',
+        headers=headers)
+
+    try:
+        response.raise_for_status()
+
+        return True
+    except HTTPError:
+        return False
+
+
+def edit_pixel(account: Account, graph: Graph, date: str, quantity: str) -> bool:
+    headers = {
+        'X-USER-TOKEN': account.token
+    }
+    params = {
+        'quantity': quantity
+    }
+
+    response = requests.put(
+        url=f'{PIXELA_USER_API_ENDPOINT}/{account.username}/graphs/{graph.id}/{date}',
+        json=params,
+        headers=headers)
+
+    try:
+        response.raise_for_status()
+
+        return True
+    except HTTPError:
+        return False
+
+
+def delete_pixel(account: Account, graph: Graph, date: str) -> bool:
+    headers = {
+        'X-USER-TOKEN': account.token
+    }
+
+    response = requests.delete(
+        url=f'{PIXELA_USER_API_ENDPOINT}/{account.username}/graphs/{graph.id}/{date}',
+        headers=headers)
+
+    try:
+        response.raise_for_status()
+    except HTTPError:
+        return False
+
+    return True
+
+

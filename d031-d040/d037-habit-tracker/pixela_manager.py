@@ -2,6 +2,7 @@ import random
 import requests
 from requests import HTTPError
 from account import Account
+from graph import Graph
 
 PIXELA_USER_API_ENDPOINT = 'https://pixe.la/v1/users'
 PIXELA_USER_PARAMS = {
@@ -57,6 +58,75 @@ def delete_account(account: Account) -> bool:
     return True
 
 
-class PixelaManager:
-    def __init__(self):
-        pass
+def get_graphs(account: Account) -> list[Graph]:
+    headers = {
+        'X-USER-TOKEN': account.token
+    }
+
+    response = requests.get(
+        url=f'{PIXELA_USER_API_ENDPOINT}/{account.username}/graphs',
+        headers=headers)
+
+    try:
+        response.raise_for_status()
+    except HTTPError:
+        return []
+
+    return [
+        Graph(g['id'], g['name'], g['unit'], g['type'], g['color'])
+        for g in response.json()['graphs']]
+
+
+def create_graph(account: Account, graph: Graph) -> bool:
+    headers = {
+        'X-USER-TOKEN': account.token
+    }
+
+    response = requests.post(
+        url=f'{PIXELA_USER_API_ENDPOINT}/{account.username}/graphs',
+        json=graph.to_dict(),
+        headers=headers)
+
+    try:
+        response.raise_for_status()
+    except HTTPError:
+        return False
+
+    return True
+
+
+def get_graph(account: Account, graph_id: str) -> Graph | None:
+    headers = {
+        'X-USER-TOKEN': account.token
+    }
+
+    response = requests.get(
+        url=f'{PIXELA_USER_API_ENDPOINT}/{account.username}/graphs/{graph_id}/graph-def',
+        headers=headers)
+
+    try:
+        response.raise_for_status()
+    except HTTPError:
+        return None
+
+    g = response.json()
+
+    return Graph(g['id'], g['name'], g['unit'], g['type'], g['color'])
+
+
+def delete_graph(account: Account, graph: Graph) -> bool:
+    headers = {
+        'X-USER-TOKEN': account.token
+    }
+
+    response = requests.delete(
+        url=f'{PIXELA_USER_API_ENDPOINT}/{account.username}/graphs/{graph.id}',
+        headers=headers)
+
+    try:
+        response.raise_for_status()
+    except HTTPError:
+        return False
+
+    return True
+

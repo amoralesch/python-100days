@@ -7,11 +7,14 @@
 from etc.helpers import ask_input
 from account_manager import AccountManager
 from account import Account
-from pixela_manager import new_token, create_user, delete_account
+from graph import Graph
+from pixela_manager import (
+    new_token, create_user, delete_account, create_graph, get_graphs,
+    get_graph, delete_graph)
 
 
 def is_valid(selection: str) -> bool:
-    return selection.isnumeric() and 0 < int(selection) < 10
+    return selection.isnumeric() and 0 <= int(selection) < 10
 
 
 def valid_username(selection: str) -> bool:
@@ -24,17 +27,28 @@ def valid_username(selection: str) -> bool:
     return valid and 0 < len(selection) <= 32
 
 
+def valid_graph_name(selection: str) -> bool:
+    """Valid regex: ^[a-z][a-z0-9-]{1,16}"""
+    valid = selection[0:1].isalpha()
+
+    for char in selection[1:]:
+        valid = valid and (char.isalnum() or char == '-')
+
+    return valid and 0 < len(selection) <= 16
+
+
 def get_option() -> int:
     print('What do you want to do?')
     print(' 1. View list of accounts.')
     print(' 2. Register a new account.')
     print(' 3. Remove an account.')
-    print(' 4. Create a new graph.')
-    print(' 5. Remove a graph.')
-    print(' 6. Add a new pixel.')
-    print(' 7. Edit a pixel.')
-    print(' 8. Remove a pixel.')
-    print(' 9. Exit.')
+    print(' 4. List existing graphs.')
+    print(' 5. Create a new graph.')
+    print(' 6. Remove a graph.')
+    print(' 7. Add a new pixel.')
+    print(' 8. Edit a pixel.')
+    print(' 9. Remove a pixel.')
+    print(' 0. Exit.')
 
     return int(ask_input('Select an option: ', is_valid))
 
@@ -84,6 +98,77 @@ def remove_account():
         print('Some error occurred, please try again.')
 
 
+def show_graphs():
+    username = input("What's the username? ")
+    user = account_manager.get_account(username)
+
+    if user is None:
+        print('Username not found.')
+
+        return
+
+    graphs = get_graphs(user)
+    if len(account_manager.accounts) > 0:
+        print('Graphs:')
+
+        for g in graphs:
+            print(f'- {g.id} -- {g.name}')
+    else:
+        print('No graphs found.')
+
+
+def new_graph():
+    username = input("What's the username? ")
+    user = account_manager.get_account(username)
+
+    if user is None:
+        print('Username not found.')
+
+        return
+
+    graph_name = ask_input(
+        "What's the graph name? ^[a-z][a-z0-9-]{1,16} ",
+        valid_graph_name)
+    unit = input("What's the unit? ")
+    graph_type = input("What's the type? int | float: ")
+    color = input("What's the color? shibafu | momiji | sora | ichou | ajisai | kuro: ")
+
+    graph = Graph(
+        graph_name,
+        graph_name,
+        unit,
+        graph_type,
+        color)
+
+    if create_graph(user, graph):
+        print('Graph created.')
+    else:
+        print('Error creating graph, maybe change graph name.')
+
+
+def remove_graph():
+    username = input("What's the username? ")
+    user = account_manager.get_account(username)
+
+    if user is None:
+        print('Username not found.')
+
+        return
+
+    graph_id = input("What's the graph id? ")
+    graph = get_graph(user, graph_id)
+
+    if graph is None:
+        print('Graph not found.')
+
+        return
+
+    if delete_graph(user, graph):
+        print('Graph deleted.')
+    else:
+        print('Error deleting graph.')
+
+
 account_manager = AccountManager()
 restart = True
 
@@ -96,5 +181,11 @@ while restart:
         create_account()
     elif option == 3:
         remove_account()
+    elif option == 4:
+        show_graphs()
+    elif option == 5:
+        new_graph()
+    elif option == 6:
+        remove_graph()
     else:
         restart = False

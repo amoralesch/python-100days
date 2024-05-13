@@ -18,7 +18,7 @@ money_machine = MoneyMachine()
 
 def is_valid_option(value):
     v = value.strip().lower()
-    valid_options = ['off', 'report']
+    valid_options = ['off', 'report', 'start']
 
     return v in valid_options or menu.find_drink(v) is not None
 
@@ -27,7 +27,7 @@ still_on = True
 
 while still_on:
     option = ask_input(
-        f'What would you like? ({menu.get_items()}): ',
+        f"Start      OFF     Report\n",
         is_valid_option).lower()
 
     if option == 'off':
@@ -36,6 +36,10 @@ while still_on:
         coffee_maker.report()
         money_machine.report()
     else:
+        option = ask_input(
+            f'What would you like? ({menu.get_items()}): ',
+            is_valid_option).lower()
+
         recipe = menu.find_drink(option)
 
         if coffee_maker.is_resource_sufficient(recipe):

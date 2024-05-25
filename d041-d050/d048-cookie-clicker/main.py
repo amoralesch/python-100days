@@ -61,8 +61,8 @@ while time.time() < timeout:
 
         check_store(money)
 
-money = get_amount(driver.find_element(By.ID, 'money').text)
+cps = get_amount(driver.find_element(By.ID, 'cps').text)
 
-print(f'After {RUN_TIME} seconds ({RUN_TIME // 60} minutes), your score is {money}.')
+print(f'After {RUN_TIME} seconds ({RUN_TIME // 60} minutes), your CpS is {cps}.')
 
 driver.quit()

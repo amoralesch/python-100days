@@ -1,5 +1,6 @@
-def is_integer(input):
-    return input.strip().isnumeric()
+def is_yes_or_no(value):
+    return value.lower() == "yes" or value.lower() == "no"
+
 
 def ask_input(prompt, validator, error_msg = "Invalid option, try again."):
     value = input(prompt)

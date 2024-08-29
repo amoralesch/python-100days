@@ -3,8 +3,17 @@
 # Learn about dictionaries
 
 from art import logo
-import verify_v2
+from etc.helpers import ask_input, is_yes_or_no
 import os
+
+
+def is_valid_username(username):
+    return username != '' and not username.isnumeric()
+
+
+def is_greater_than_zero(bid_num):
+    return int(bid_num) > 0
+
 
 other_bidder = True
 register = {}
@@ -13,15 +22,21 @@ print(logo)
 print("Welcome to the secret auction program.")
 
 while other_bidder:
-    user_name = verify_v2.verify("What is your name?: \n",
-        verify_v2.validUserName, "Invalid name. Try again.")
-    user_bid = verify_v2.verify("What's your bid?: $" ,
-        verify_v2.isGreaterthanZero, "Invalid bid. Try again.")
+    user_name = ask_input(
+        "What is your name?: \n",
+        is_valid_username,
+        "Invalid name. Try again.")
+    user_bid = ask_input(
+        "What's your bid?: $" ,
+        is_greater_than_zero,
+        "Invalid bid. Try again.")
 
     register[user_name] = int(user_bid)
 
-    other_bidder = verify_v2.verify("Are there any other bidders? Type 'yes' or 'no'.\n",
-        verify_v2.YesOrNo, "Invalid bid. Try again.")
+    other_bidder = ask_input(
+        "Are there any other bidders? Type 'yes' or 'no'.\n",
+        is_yes_or_no,
+        "Invalid bid. Try again.")
 
     other_bidder = other_bidder.lower() == 'yes'
 

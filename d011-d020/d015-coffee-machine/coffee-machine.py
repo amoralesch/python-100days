@@ -57,7 +57,6 @@ def enough_resources(r):
 
         if ingredient in r and r[ingredient] > quantity:
             print(f'Sorry there is not enough {ingredient}.')
-
             return False
 
     return True
@@ -116,7 +115,7 @@ while still_on:
             continue
 
         print(f'The price of {option} is ${price:.2f}.')
-        
+
         amount = ask_money('quarters', 0.25)
         if amount < price:
             amount += ask_money('dimes', 0.10)
@@ -124,8 +123,8 @@ while still_on:
             amount += ask_money('nickles', 0.05)
         if amount < price:
             amount += ask_money('pennies', 0.01)
-            
-        if price > amount: 
+
+        if price > amount:
             print("Sorry that's not enough money. Money refunded.")
             continue
 

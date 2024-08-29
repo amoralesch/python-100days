@@ -34,7 +34,10 @@ class MoneyMachine:
 
         if self.money_received >= cost:
             change = round(self.money_received - cost, 2)
-            print(f"Here is {self.CURRENCY}{change} in change.")
+
+            if change > 0:
+                print(f"Here is {self.CURRENCY}{change} in change.")
+
             self.profit += cost
             self.money_received = 0
 

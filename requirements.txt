@@ -1,4 +1,7 @@
 beautifulsoup4~=4.12.3
 colorgram.py==1.2.0
+pandas==2.2.2
+pyperclip==1.8.2
 requests~=2.31.0
 selenium~=4.21.0
+spotipy~=2.23.0
